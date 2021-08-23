@@ -11,6 +11,7 @@
     "core-js": "^3.6.5",
     "prettier": "^2.3.2",
     "prettier-eslint": "^13.0.0",
+    "vant": "^2.12.26",
     "vue": "^2.6.11",
     "vue-eslint-parser": "^7.10.0",
     "vue-router": "^3.2.0",
