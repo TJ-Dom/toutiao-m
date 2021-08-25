@@ -87,3 +87,6 @@ body {
   font-weight: normal;
   font-family: MicrosoftYaHei;
 }
+.page-nav-bar .van-icon {
+  color: #fff;
+}

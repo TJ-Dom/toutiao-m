@@ -1,7 +1,9 @@
 <template>
   <div class="login-container">
     <!-- 导航栏 -->
-    <van-nav-bar title="登录" class="page-nav-bar" />
+    <van-nav-bar title="登录" class="page-nav-bar">
+      <van-icon slot="left" name="cross" size="18" @click="$router.back()" />
+    </van-nav-bar>
     <!-- /导航栏 -->
     <!-- 登录表单 -->
     <van-form @submit="onSubmit" ref="loginForm">
@@ -23,29 +25,32 @@
         center
         type="number"
         maxlength="6"
+        class="codeLine"
         :rules="userFormRules.code"
       >
-        <i slot="left-icon" class="iconfont icon-yanzhengma"> </i
-        ><template #button class="btn-box">
-          <!-- 发送验证码-倒计时 -->
-          <van-count-down
-            :time="1000 * 60"
-            format=" ss 秒"
-            v-if="isCountDownShow"
-            @finish="isCountDownShow = false"
-          />
-          <van-button
-            v-else
-            round
-            size="small"
-            type="default"
-            class="send-sms-btn"
-            native-type="button"
-            @click="onSendSms"
-            >获取验证码</van-button
-          >
-        </template></van-field
-      >
+        <i slot="left-icon" class="iconfont icon-yanzhengma"></i>
+        <template #button>
+          <div class="sendBox">
+            <!-- 发送验证码-倒计时 -->
+            <van-count-down
+              :time="1000 * 60"
+              format=" ss 秒"
+              v-if="isCountDownShow"
+              @finish="isCountDownShow = false"
+            />
+            <van-button
+              v-else
+              round
+              size="small"
+              type="default"
+              class="send-sms-btn"
+              native-type="button"
+              @click="onSendSms"
+              >获取验证码</van-button
+            >
+          </div>
+        </template>
+      </van-field>
       <div class="login-btn-wrap">
         <van-button block type="info" native-type="submit" class="login-btn"
           >登录</van-button
@@ -57,7 +62,7 @@
 </template>
 
 <script>
-import { login, sendSms } from '@/api/login.js'
+import { login, sendSms } from '@/api/user/login.js'
 export default {
   name: 'LoginIndex',
   data () {
@@ -74,7 +79,7 @@ export default {
           },
           {
             pattern:
-              /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
+              /^(13[0-9]|14[5|7]|15[0|1|2|3|4|5|6|7|8|9]|17[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/,
             message: '请输入有效的手机号码'
           }
         ],
@@ -107,6 +112,8 @@ export default {
         this.$store.commit('setUser', data.data)
         this.$toast.success('登录成功', data) // vant轻提示
         // console.log('登录成功', res)
+        // 登录成功，跳转回原来页面(暂时性，不严谨待后续优化)
+        this.$router.back()
       } catch (err) {
         if (err.response.status === 400) {
           // console.log('手机号或验证码错误')
@@ -119,7 +126,7 @@ export default {
       // 4.根据请求响应结果处理后续操作
     },
     async onSendSms () {
-      console.log('onSendSms')
+      // console.log('onSendSms')
       // 校验手机号
       try {
         await this.$refs.loginForm.validate('mobile')
@@ -154,12 +161,18 @@ export default {
   font-size: 37px;
   padding-right: 20px;
 }
-.send-sms-btn {
-  height: 46px;
-  line-height: 46px;
-  color: #666;
-  background-color: #ededed;
-  font-size: 22px;
+.sendBox {
+  display: flex;
+  justify-content: center;
+  border-left: 2px solid #ededed;
+  padding-left: 20px;
+  .send-sms-btn {
+    height: 46px;
+    // line-height: 46px;
+    color: #666;
+    background-color: #ededed;
+    font-size: 22px;
+  }
 }
 .login-btn-wrap {
   padding: 53px 33px;
