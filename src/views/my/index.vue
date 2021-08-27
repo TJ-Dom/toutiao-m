@@ -75,11 +75,23 @@ import { mapState } from 'vuex'
 import { getUserInfo } from '@/api/user/login.js'
 export default {
   name: 'MyIndex',
+  // components:{},
+  // props:{},
   data () {
     return {
       userInfo: {} // 用户信息
     }
   },
+  computed: {
+    ...mapState(['user'])
+  },
+  // watch:{},
+  created () {
+    if (this.user) {
+      this.loadUserInfo()
+    }
+  },
+  // mounted(){},
   methods: {
     onLogout () {
       // 退出提示
@@ -108,14 +120,6 @@ export default {
         this.$toast('获取数据失败，请稍后再试')
       }
     }
-  },
-  created () {
-    if (this.user) {
-      this.loadUserInfo()
-    }
-  },
-  computed: {
-    ...mapState(['user'])
   }
 }
 </script>

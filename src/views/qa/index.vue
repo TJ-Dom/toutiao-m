@@ -5,6 +5,16 @@
 <script>
 export default {
   name: 'QaIndex'
+  // components: {},
+  // props: {},
+  // data () {
+  //   return {}
+  // },
+  // computed: {},
+  // watch: {},
+  // created () {},
+  // mounted () {},
+  // methods: {}
 }
 </script>
 

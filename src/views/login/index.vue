@@ -65,6 +65,8 @@
 import { login, sendSms } from '@/api/user/login.js'
 export default {
   name: 'LoginIndex',
+  // components: {},
+  // props: {},
   data () {
     return {
       user: {
@@ -94,6 +96,10 @@ export default {
       isCountDownShow: false
     }
   },
+  // computed: {},
+  // watch: {},
+  // created () {},
+  // mounted () {},
   methods: {
     async onSubmit () {
       // 1.获取表单数据

@@ -78,7 +78,6 @@ body {
 }
 .page-nav-bar {
   width: 750px;
-  line-height: 128px;
   background-color: #3296fa;
 }
 .page-nav-bar .van-ellipsis {

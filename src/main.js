@@ -11,6 +11,9 @@ import 'vant/lib/index.css'
 import './styles/index.less'
 // 加载amfe-flexible - 设置 rem 基准值
 import 'amfe-flexible'
+// 3.在main.js全局加载引入使用dayjs
+import './utils/dayjs'
+
 // 注册使用Vant组件库
 Vue.use(Vant)
 
