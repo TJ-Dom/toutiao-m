@@ -75,6 +75,7 @@ export default {
     display: flex;
     padding: 30px 0;
     height: 146px;
+    z-index: 3;
     .cover-item {
       flex: 1;
       height: 146px;
