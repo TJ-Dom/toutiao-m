@@ -29,44 +29,92 @@
       <!-- 为汉堡按钮占位 -->
       <div slot="nav-right" class="placeholder"></div>
       <!-- 插入汉堡按钮 -->
-      <div slot="nav-right" class="hamburger-btn">
+      <div
+        slot="nav-right"
+        class="hamburger-btn"
+        @click="isChannelEditShow = true"
+      >
         <i class="iconfont icon-gengduo"></i>
       </div>
     </van-tabs>
     <!-- /频道列表 -->
+
+    <!-- 频道编辑弹出框 -->
+    <van-popup
+      v-model="isChannelEditShow"
+      closeable
+      position="bottom"
+      close-icon-position="top-left"
+      :style="{ height: '100%' }"
+    >
+      <ChannelEdit
+        :my-channels="channels"
+        :active="active"
+        @updata-active="onUpdataActive"
+      />
+    </van-popup>
+    <!-- /频道编辑弹出框 -->
   </div>
 </template>
 
 <script>
 import { getUserChannels } from '@/api/user/login.js'
 import ArticleList from '@/views/home/components/article-list.vue'
+import ChannelEdit from './components/channel-edit.vue'
+import { mapState } from 'vuex'
+import { getItem } from '@/utils/storage'
 export default {
   name: 'HomeIndex',
   components: {
-    ArticleList
+    ArticleList,
+    ChannelEdit
   },
-  // props:{},
+  props: {},
   data () {
     return {
       active: 0,
-      channels: [] // 频道列表
+      channels: [], // 频道列表
+      isChannelEditShow: false // 控制编辑频道弹出层的显示状态
     }
   },
-  // computed:{},
-  // watch:{},
+  computed: {
+    ...mapState(['user'])
+  },
+  watch: {},
   created () {
     this.loadChannels()
   },
-  // mounted(){},
+  mounted () {},
   methods: {
     async loadChannels () {
       try {
-        const { data } = await getUserChannels()
-        // console.log(data)
-        this.channels = data.data.channels
+        let channels = []
+        if (this.user) {
+          // 已登录，请求获取用户频道列表
+          const { data } = await getUserChannels()
+          // console.log(data)
+          channels = data.data.channels
+        } else {
+          // 未登录，判断是否有本地的频道列表数据
+          const localChannels = getItem('TOUTIAO_CHANNELS')
+          if (localChannels) {
+            //      有，拿来使用
+            channels = localChannels
+          } else {
+            //      没有，请求获取默认频道列表
+            const { data } = await getUserChannels()
+            // console.log(data)
+            channels = data.data.channels
+          }
+        }
+        this.channels = channels
       } catch (err) {
         this.$toast('获取频道列表失败')
       }
+    },
+    onUpdataActive (index, isChannelEditShow = true) {
+      this.active = index
+      this.isChannelEditShow = isChannelEditShow
     }
   }
 }
@@ -153,6 +201,11 @@ export default {
         background-size: contain;
       }
     }
+  }
+  /deep/.van-icon-cross::before {
+    color: #222222;
+    font-size: 30px;
+    z-index: 2;
   }
 }
 </style>
