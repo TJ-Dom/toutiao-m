@@ -110,7 +110,11 @@ export default {
         }
         this.channels = channels
       } catch (err) {
-        this.$toast('获取频道列表失败')
+        let message = '获取频道列表失败'
+        if (err.response && err.response.status === 401) {
+          message = '用户已退出登录，请重新登录！'
+        }
+        this.$toast(message)
       }
     },
     onUpdataActive (index, isChannelEditShow = true) {
